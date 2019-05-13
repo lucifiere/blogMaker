@@ -4,7 +4,7 @@
   "digest": {
     "articleUrl": "/page/tech/blog/blog-2/blog-2.html",
     "content": "对于网络编程而言，框架性能的优劣往往取决于三个因素：传输、协议、调度（通信框架的线程模型），它们从不同的角度影响着应用的通信效率。本文试图通过描述几个主要的性能瓶颈，以及Netty的应对之道，来揭秘Netty强大的性能基础。",
-    "picUrl": "http://img.mp.itc.cn/upload/20161129/309082ea1b5a484bac7186fbcfde3060_th.jpg",
+    "picUrl": "/page/tech/pic/netty.jpg",
     "tag": "中间件",
     "title": "Netty高性能之道：传输"
   },

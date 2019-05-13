@@ -37,12 +37,12 @@ class BlogReader {
         new File(ROOT_DIR).eachFile {
             articles << JSON.parseObject(it.bytes, Article.class)
         }
-        preHandle(articles)
+        preHandleArticle(articles)
         NAV_MAP = MapUtils.multiGroupByFiled(articles, { k -> (k as Article).getNavType() })
         ID_MAP = MapUtils.singleGroupByFiled(articles, { k -> (k as Article).getId() })
     }
 
-    private static void preHandle(List<Article> articles) {
+    private static void preHandleArticle(List<Article> articles) {
         articles.forEach {
             it.getPhases().each {
                 it.setSegment(it.segment.stream().map({

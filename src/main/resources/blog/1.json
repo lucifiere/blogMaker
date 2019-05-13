@@ -4,7 +4,7 @@
   "digest": {
     "articleUrl": "/page/tech/blog/blog-1/blog-1.html",
     "content": "Netty是目前业界最流行的通信框架，它以高吞吐、低延迟、节省资源等特性在网络编程工具中傲视群雄，许多耳熟能详的Java中间件的实现都建立在Netty的基础上。因此，学习Netty的设计实现，是每个Java程序员技术进阶的必经之路。",
-    "picUrl": "http://img.mp.itc.cn/upload/20161129/309082ea1b5a484bac7186fbcfde3060_th.jpg",
+    "picUrl": "/page/tech/pic/netty.jpg",
     "tag": "中间件",
     "title": "极简Netty入门"
   },

@@ -4,7 +4,7 @@
   "digest": {
     "articleUrl": "/page/tech/blog/blog-3/blog-3.html",
     "content": " DNS是每个程序员都听过的一种网络服务，用来解析域名到具体的IP。在大型系统中，DNS服务是比较重要的架构组成，在合适的环节引入DNS服务是架构同学必备的基本功。因此，若要提升自己的架构能力，了解DNS的工作原理是颇为必要的。",
-    "picUrl": "http://img.mp.itc.cn/upload/20161129/309082ea1b5a484bac7186fbcfde3060_th.jpg",
+    "picUrl": "/page/tech/pic/dns.jpeg",
     "tag": "架构",
     "title": "浅谈DNS的工作原理"
   },
