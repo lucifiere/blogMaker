@@ -21,7 +21,7 @@ class TechBlogController {
         mv.addObject("digestList", articleService.getDigestList(navType))
         mv.addObject("categoryList", articleService.getCategoryList(navType))
         mv.addObject("navType", navType)
-        mv.addObject("pageList", PageUtils.pageList())
+        mv.addObject("pageList", PageUtils.pageList(navType))
         mv
     }
 
