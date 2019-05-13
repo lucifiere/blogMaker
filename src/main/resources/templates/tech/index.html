@@ -1,0 +1,118 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>XD.Wang的技术博客</title>
+    <!-- Load CSS -->
+    <link href="/static/assets/tech/css/style.css" rel="stylesheet" type="text/css"/>
+    <!-- Load jQuery library -->
+    <script type="text/javascript" src="/static/assets/tech/scripts/jquery-1.6.2.min.js"></script>
+    <!-- Load custom js -->
+    <script type="text/javascript" src="/static/assets/tech/scripts/panelslide.js"></script>
+    <script type="text/javascript" src="/static/assets/tech/scripts/custom.js"></script>
+    <!-- Load topcontrol js -->
+    <script type="text/javascript" src="/static/assets/tech/scripts/scrolltopcontrol.js"></script>
+    <!-- Load NIVO Slider -->
+    <link rel="stylesheet" href="/static/assets/tech/css/nivo-slider.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/static/assets/tech/css/nivo-theme.css" type="text/css" media="screen"/>
+    <script src="/static/assets/tech/scripts/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+    <script src="/static/assets/tech/scripts/nivo-options.js" type="text/javascript"></script>
+    <!-- Load fancybox -->
+    <script type="text/javascript" src="/static/assets/tech/scripts/jquery.fancybox-1.3.4.pack.js"></script>
+    <script type="text/javascript" src="/static/assets/tech/scripts/jquery.easing-1.3.pack.js"></script>
+    <script type="text/javascript" src="/static/assets/tech/scripts/jquery.mousewheel-3.0.4.pack.js"></script>
+    <link rel="stylesheet" href="/static/assets/tech/css/jquery.fancybox-1.3.4.css" type="text/css" media="screen"/>
+</head>
+<body>
+
+<!--/*@thymesVar id="navType" type="com.lucifiere.blogmaker.controller.TechBlogController"*/-->
+<input type="hidden" th:value="${navType}" id="navType">
+
+<!--This is the START of the header-->
+<div id="topcontrol" style="position: fixed; bottom: 5px; left: 960px; opacity: 1; cursor: pointer;"
+     title="Go to Top"></div>
+<div id="header-wrapper">
+    <div id="header">
+        <div id="logo"><a href="/page/tech/blog.html"><img src="/static/assets/tech/images/logo.jpg" width="140" height="70"
+                                                 alt="logo"/></a></div>
+        <div id="header-text">
+            <h4>技术博客 Code Craft</h4>
+            <h6 th:text="${navType}"><a href="/page/tech/blog.html">Home → </a></h6>
+        </div>
+    </div>
+</div>
+<!--END of header-->
+<!--This is the START of the menu-->
+<div id="menu-wrapper">
+    <div id="main-menu">
+        <ul>
+            <li><a id="nav-blog" href="/page/tech/blog.html">博客</a></li>
+            <li><a id="nav-note" href="/page/tech/note.html">笔记</a></li>
+            <li><a id="nav-fq" href="/page/tech/faq.html">问答</a></li>
+            <li><a id="nav-digest" href="/page/tech/blog.html">文摘</a></li>
+        </ul>
+    </div>
+</div>
+<!--END of menu-->
+<!--This is the START of the segment-->
+<div id="content">
+    <!--This is the START of the blog section-->
+    <div id="blog">
+        <!-- 文章 -->
+        <div th:each="digest: ${digestList}" class="blog-item">
+            <a th:href="${digest.articleUrl}">
+                <img class="single_image" th:src="${digest.picUrl}" width="280" height="180" alt="blog1" src=""/>
+            </a>
+            <div class="blog-item-info">
+                <div class="user">XD.Wang</div>
+                <div th:text="${digest.tag}" class="tags"></div>
+            </div>
+            <div class="blog-item-content"><a style="color: #121212" th:href="${digest.articleUrl}">
+                <h5 th:text="${digest.title}"></h5>
+            </a>
+                <p th:text="${digest.content}"></p>
+                <a class="readmore" th:href="${digest.articleUrl}">read more →</a> <br/>
+            </div>
+        </div>
+
+        <!-- 页码 -->
+        <div id="pagination" th:each="page: ${pageList}">
+            <a th:href="${page.pageUrl}" th:text="${page.pageNo}"></a>
+        </div>
+    </div>
+    <!--END of blog section-->
+</div>
+<!--END of segment-->
+<p class="slide"><a href="#" class="btn-slide"></a></p>
+<div id="slide-panel">
+    <!--This is the START of the follow section-->
+    <div id="follow" style="text-align: left;">
+        <h3><a href="https://lucifiere.github.io/#index" style="text-align: left;color: dodgerblue">回到个人主页</a></h3>
+        <h4 style="margin-bottom: 10px;padding-left: 20px;">个人履历</h4>
+        <p class="slide_p" style="text-align: left;">个人：1992年生、新西安人，老家安康，现居北京</p>
+        <p class="slide_p" style="text-align: left;">教育：2015年毕业于西北大学，本科学历</p>
+        <p class="slide_p" style="text-align: left;">
+            经历：2015校招进入网易游戏（广州），2016-2017就职于神州优车集团（北京），2018至今在阿里巴巴（北京）工作</p>
+        <p class="slide_p" style="text-align: left;">经验：营销、平台化、大数据、基础工具设计</p>
+        <p class="slide_p" style="text-align: left;">技术栈：Java、Groovy、Web、架构</p>
+    </div>
+</div>
+</body>
+<script type="application/javascript">
+    $(function () {
+        var navType = $("#navType").val();
+        if (navType === "BLOG") {
+            $("#nav-blog").addClass("selected").append(" -> ");
+        } else if (navType === "NOTE") {
+            $("#nav-note").addClass("selected").append(" -> ");
+
+        } else if (navType === "FAQ") {
+            $("#nav-fq").addClass("selected").append(" -> ");
+
+        } else if (navType === "DIGEST") {
+            $("#nav-digest").addClass("selected").append(" -> ");
+
+        }
+    });
+</script>
+</html>
