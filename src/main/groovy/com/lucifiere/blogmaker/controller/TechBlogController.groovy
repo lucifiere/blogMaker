@@ -16,12 +16,13 @@ class TechBlogController {
     private ArticleServiceImpl articleService
 
     @RequestMapping("index")
-    ModelAndView index(String navType) {
+    ModelAndView index(String navType, Integer pageNo) {
         ModelAndView mv = new ModelAndView("tech/index")
-        mv.addObject("digestList", articleService.getDigestList(navType))
+        List digestList = articleService.getDigestList(navType)
+        mv.addObject("digestList", PageUtils.paging(digestList, pageNo))
         mv.addObject("categoryList", articleService.getCategoryList(navType))
         mv.addObject("navType", navType)
-        mv.addObject("pageList", PageUtils.pageList(navType))
+        mv.addObject("pageList", PageUtils.pageList(navType, digestList.size()))
         mv
     }
 

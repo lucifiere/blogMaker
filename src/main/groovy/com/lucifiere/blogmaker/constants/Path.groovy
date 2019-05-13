@@ -1,6 +1,6 @@
 package com.lucifiere.blogmaker.constants
 
-class Patch {
+class Path {
 
     final static String BLOG_DIR_PATH = "/page/tech/blog/"
 
