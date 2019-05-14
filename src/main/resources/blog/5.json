@@ -4,7 +4,7 @@
   "digest": {
     "articleUrl": "/page/tech/blog/blog-5/blog-5.html",
     "content": "保持系统高可用的主要手段有负载均衡、隔离、降级和限流等，本系列文章将逐个介绍各种策略的思路与实现。",
-    "picUrl": "/page/tech/pic/arch-1.jpeg",
+    "picUrl": "/page/tech/pic/arch.jpeg",
     "tag": "架构",
     "title": "架构进阶 - 通过负载均衡实现高可用"
   },

@@ -4,7 +4,7 @@
   "digest": {
     "articleUrl": "/page/tech/blog/blog-6/blog-6.html",
     "content": "保持系统高可用的主要手段有负载均衡、隔离、降级和限流等，本文讨论下降级的思路与实现。服务降级，指的是当系统负载或功能异常时，将原服务禁用或者替换为简单流程的高可用方案。",
-    "picUrl": "/page/tech/pic/arch-2.jpeg",
+    "picUrl": "/page/tech/pic/arch.jpeg",
     "tag": "架构",
     "title": "架构进阶 - 通过降级策略实现高可用"
   },
