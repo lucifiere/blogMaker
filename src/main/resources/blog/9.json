@@ -1,0 +1,58 @@
+{
+  "id": "blog-9",
+  "title": "Netty组件分析：ChannelPipeline",
+  "digest": {
+    "articleUrl": "/page/tech/blog/blog-9/blog-9.html",
+    "content": "本文试图剖析Netty最为重要的组件之一：ChannelPipeline。通过分析其核心源码，来说明这个模块的内在原理。如果读者之前从未接触过Netty，建议先阅读入门教程（Netty入门），再继续往下学习。",
+    "picUrl": "/page/tech/pic/netty.jpg",
+    "tag": "中间件",
+    "title": "Netty组件分析：ChannelPipeline"
+  },
+  "navType": "BLOG",
+  "phases": [
+    {
+      "title": "概述",
+      "segment": [
+        "Netty是款高度组件化的网络框架，学习Netty最好的方法，就是从这些边界分明的组件入手，逐个剖析，理解它们的作用。",
+        "本文试图剖析Netty最为重要的组件之一：ChannelPipeline。通过分析其核心源码，来说明这个模块的内在原理。如果读者之前从未接触过Netty，建议先阅读入门教程（Netty入门），再继续往下学习。",
+        "ChannelPipeline是ChannelHandler的容器。它根据程序员的意图，将零散的ChannelHandler串联在一起，形成一个双向链表结构。",
+        "ChannelPipeline就像是一个管道，IO操作产生的事件，都会在这个管道中依序传播，然后被其中的ChannelHandler处理。既然ChannelPipeline处理的是IO事件，那它必定会关联一个产生事件的Channel。当一个Channel被开启时，对应的ChannelPipeline就会被创建。",
+        "在深入分析ChannelPipeline之前，读者多少得了解些 事件 的相关知识，毕竟ChannelPipeline编排ChannelHandler就是为了处理事件。事件，是网络生命周期中我们关心的那些动作节点，如连接建立、连接断开、读数据、写数据。所谓的Netty网络编程，称之为事件处理编程也不为过。",
+        "从数据流向来看，Netty的事件可分为两类：出站事件和入站事件。若数据是从用户应用程序到远程主机，我们称之为出站(outbound)，对应触发的事件就是出站事件，相反，若数据时从远程主机到用户应用程序称之为入站(inbound)，对应触发的事件就是入站事件。",
+        "ChannelPipeline中编排的ChannelHandler有的可以处理出站事件，有的可以处理入站事件，它们根据用户的编排顺序，按数据流动对事件按序处理。"
+      ]
+    },
+    {
+      "title": "源码分析 - 创建ChannelPipeline：",
+      "segment": [
+        "学习了Netty的事件基础后，就能开始研究ChannelPipeline的核心源码了。ChannelPipeline的核心源码主要涉及到3个功能，创建ChannelPipeline、添加ChannelPipeline节点和删除ChannelPipeline节点",
+        "上文提到过，当一个Channel被开启时，对应的ChannelPipeline就会被创建，我们就从这里开始讲起。",
+        "从上方的代码片段可知，在Channel构造时，ChannelPipeline也会被构造出来。",
+        "ChannelPipeline的构造方法做了两件事：关联一个Channel、添加头结点和尾节点。当这两个节点添加完成后，链表的雏形大概如下所示：",
+        "看到这里，读者可能有个疑问：不是说ChannelPipeline中是ChannelHandler的链表嘛，怎么链表在构造时，连ChannelHandler的影子都找不见？",
+        "准确而言，ChannelPipeline中链表的节点并非ChannelHandler，而是ChannelHandlerContext，无论是上文出现过业务无关的TailContext、HeadContext，还是后文将会出现的、用户自定义的DefaultChannelHandlerContext，都是ChannelHandlerContext的具体实现。这个类持有一个ChannelHandler的引用，并包含了ChannelHandler执行时所需的上下文信息，如关联的Channel、关联的事件循环（executor）等。我们从这个类中，能拿到相应的ChannelHandler。",
+        "ChannelHandlerContext最常见的实现是AbstractChannelHandlerContext，值得一提的是，这个类中定义了两个布尔变量inbound和outbound，用来标识当前Handler是入站事件处理器还是出站事件处理器。当inbound和outbound都为true时，这个ChannelHandler就既能处理入站事件，又能处理出站事件。这种双向处理的ChannelHandler，它的一种典型应用场景，就是传说中的编解码器。"
+      ]
+    },
+    {
+      "title": "源码分析 - 添加ChannelPipeline节点：",
+      "segment": [
+        "ChannelPipeline创建完成后，便可对其添加ChannelHandler。ChannelPipeline提供了两个常用方法来添加Handler：",
+        "ChannelPipeline内部的链表是双向链表，因此支持从头尾两端进行插入，对应的方法分别是addFirst和addLast，他们的实现逻辑相似，这里以addLast为例分析。",
+        "addLast的代码实现言简意赅。为Pipeline添加节点可概括为三步：检查ChannelHandler是否重复添加、创建链表节点、添加节点、执行节点添加事件回调。",
+        "ChannelPipeline检查ChannelHandler是否重复添加的依据有两个。首先，检查该ChannelHandler的added的属性，若一个ChannelHandler被添加到链表了，它的added属性会被修改为true；其次，检查ChannelHandler是否被标记为Shareable，如果一个ChannelHandler被@Shareable注解标记，那么它是允许被重复添加的。",
+        "创建节点的代码前文已经罗列过，此处不再赘述。不过需注意的是，在添加之前，如果用户给ChannelHandler指定了自定义的名称，ChannelPipeline还会检查这个名称是否已被用过，在一个ChannelPipeline中，这个名称需要保持唯一。",
+        "将新节点添加到原链表中是经典的链表操作：将新节点的前置指针指向倒数第二个业务节点、新节点的后置指针指向尾节点，再将倒数第二个业务节点的后置指针指向新节点、尾节点的前置指针指向新节点。",
+        "添加完ChannelHandler后，该ChannelHandler定义的handlerAdded方法便会被执行，如果你的代码需要在ChannelHandler被添加到Pipeline后执行，可以重写这个方法。"
+      ]
+    },
+    {
+      "title": "源码分析 - 移除ChannelPipeline节点：",
+      "segment": [
+        "Netty 支持Handler的可插拔，允许动态编织pipeline。举个栗子，一个连接首次建立时，往往需要通过进行权限认证，用户可定义一个ChannelHandler专门做这个认证，在认证通过之后，就可以将此ChannelHandler移除，下次pipeline在传播事件的时候就不会在走这个ChannelHandler了。",
+        "链表的节点删除通过remove方法实现。remove的套路和addLast类似，也是执行类似的链表节点调整，然后执行handlerRemoved回调。",
+        "除了ChannelPipeline的节点操作外，其对事件异常传播的支持也是值得学习的核心代码，限于篇幅，本文不再展开，不过读者若想更深入的了解这个组件，建议也去阅读一下。"
+      ]
+    }
+  ]
+}
